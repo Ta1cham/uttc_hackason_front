@@ -9,7 +9,7 @@ export default function Home() {
           <p className="text-lg text-center">
             Get started by editing{" "}
             <code className="p-1 font-mono text-sm bg-gray-100 rounded">
-              pages/index.tsx
+				hogefugapiyo
             </code>
           </p>
         </div>

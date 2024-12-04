@@ -20,15 +20,15 @@ export default function FolderList({
   return (
     <div
       style={{
-        display: "flex", // フレックスボックスを有効化
-        height: "100vh", // ビューポート全体の高さにする
-      }}>
+            display: "flex", // フレックスボックスを有効化
+            height: "100vh", // ビューポート全体の高さにする
+        }}>
     <aside
         style={{
-          width: "300px", // サイドバーの幅
-          backgroundColor: "#f5f5f5", // 背景色
-          boxShadow: "2px 0 5px rgba(0,0,0,0.1)", // 影
-          padding: "10px", // 内側余白
+            width: "300px", // サイドバーの幅
+            backgroundColor: "#f5f5f5", // 背景色
+            boxShadow: "2px 0 5px rgba(0,0,0,0.1)", // 影
+            padding: "10px", // 内側余白
         }}
         >
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -40,7 +40,12 @@ export default function FolderList({
             </ListItemAvatar>
             <ListItemText primary="あとでファビコンにする"/>
         </ListItem>
-        <ListItem>
+        <ListItem sx={{
+            borderRadius: 10,
+            backgroundColor: 'white',
+            '&:hover': {
+                backgroundColor: '#f0f0f0',
+            }}}>
             <ListItemAvatar>
             <Avatar>
                 <HomeIcon />

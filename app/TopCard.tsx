@@ -1,5 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { fireAuth } from "./firebase";
 
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
@@ -30,14 +32,27 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 const RegisterCard: React.FC = () => {
     const router = useRouter();
+
+    const signInWithGoogle = () => {
+      const provider = new GoogleAuthProvider();
+
+      signInWithPopup(fireAuth, provider)
+      .then(res => {
+        const user = res.user;
+        alert("ログインユーザー: " + user.displayName);
+      })
+      .catch(err => {
+        const errorMessage = err.message;
+        alert(errorMessage);
+      });
+    }
     return (
         <Card variant='outlined'>
-        <h1>会員登録</h1>
         <Box display='flex' flexDirection='column' gap={2}>
             <Button variant='outlined' sx={{color: 'white', backgroundColor: '#00c616'}} onClick={() => router.push('/auth/register')}>
                 <MailOutline/><Box sx={{ width: 8 }} />メールで登録
             </Button>
-            <Button variant='outlined' sx={{color: 'black', backgroundColor: 'white', textTransform: 'none'}} onClick={() => alert("not yet implemented")}>
+            <Button variant='outlined' sx={{color: 'black', backgroundColor: 'white', textTransform: 'none'}} onClick={() => alert('not yet implemented')}>
                 <GoogleIcon/><Box sx={{ width: 8 }} />Googleで登録
             </Button>
         </Box>

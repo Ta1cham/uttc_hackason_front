@@ -1,19 +1,16 @@
 import Image from "next/image";
+import Stack from '@mui/material/Stack';
+import RegisterCard from "./RegisterCard";
 
-export default function Home() {
+
+const Home = () => {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-3xl font-bold text-center">Twitter Clone</h1>
-          <p className="text-lg text-center">
-            Get started by editing{" "}
-            <code className="p-1 font-mono text-sm bg-gray-100 rounded">
-				hogefugapiyo
-            </code>
-          </p>
-        </div>
+        <RegisterCard />
       </main>
+
+
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -64,3 +61,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

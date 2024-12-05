@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 import { fireAuth } from '../../firebase';
 
@@ -40,6 +41,7 @@ const LogoutCard = () => {
             router.push('/auth/login')
         })
         .catch((error) => {
+            console.log(error)
             alert('ログアウトに失敗しました。')
         })
     }
@@ -47,7 +49,7 @@ const LogoutCard = () => {
     return (
         <Card variant='outlined'>
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2}}>
-            <img src='/logo.png' alt='logo' width='80' height='80' />
+            <Image src='/logo.png' alt='logo' width='80' height='80' />
             <Typography variant='h6' sx={{fontWeight: 'bold'}}>ログアウトしますか?</Typography>
             <Typography variant='body2' sx={{textAlign: 'left'}}>いつでもログインし直すことができます。ログアウトすると再度利用するにはログインし直す必要があります。</Typography>
             <Button

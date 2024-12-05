@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { fireAuth } from "./firebase";
+//import { signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+//import { fireAuth } from "./firebase";
 
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
@@ -33,6 +33,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const RegisterCard: React.FC = () => {
     const router = useRouter();
 
+    /*
     const signInWithGoogle = () => {
       const provider = new GoogleAuthProvider();
 
@@ -46,6 +47,7 @@ const RegisterCard: React.FC = () => {
         alert(errorMessage);
       });
     }
+    */
     return (
         <Card variant='outlined'>
         <Box display='flex' flexDirection='column' gap={2}>

@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '../../firebase';
-import { Login } from '@mui/icons-material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -50,7 +49,6 @@ const LoginForm = () => {
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
     // パスワードの表示・非表示を管理するstate
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const router = useRouter();
 

@@ -61,6 +61,7 @@ const LoginForm = () => {
             const user = userCredential.user;
             alert('ログインユーザー: ' + user.email);
 
+            console.log(fireAuth.currentUser);
             // ログイン後の画面に遷移
             router.push('/home')
         })

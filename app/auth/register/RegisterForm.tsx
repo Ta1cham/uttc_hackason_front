@@ -181,7 +181,7 @@ const RegisterForm = () => {
                         aria-label="toggle password visibility"
                         style={{ marginLeft: "8px" }}
                         >
-                        {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
+                        {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                 </div>
             </FormControl>

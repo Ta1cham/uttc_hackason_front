@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '../../firebase';
 import { useUser } from '../../context/Usercontext';
-import axios from 'axios';
+import apiClient from '../../lib/apiClients';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -60,7 +60,7 @@ const LoginForm = () => {
             const user = userCredential.user;
 
             // http://localhost:8000/user?id=user.id
-            const response = await axios.get(`http://localhost:8000/user?id=${user.uid}`)
+            const response = await apiClient.get(`/user?id=${user.uid}`)
 
             if (response.status === 200) {
                 console.log("ユーザー情報を取得しました")

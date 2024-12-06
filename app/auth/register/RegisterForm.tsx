@@ -18,6 +18,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useUser } from '../../context/Usercontext';
 import { fireAuth } from '../../firebase';
 import axios from 'axios';
+import apiClient from '../../lib/apiClients';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -104,7 +105,7 @@ const RegisterForm = () => {
             const userCredential = await createUserWithEmailAndPassword(fireAuth, email, password);
             const user = userCredential.user;
 
-            const response = await axios.post('http://localhost:8000/user', {
+            const response = await apiClient.post('/user', {
                 id: user.uid,
                 name: name,
             })

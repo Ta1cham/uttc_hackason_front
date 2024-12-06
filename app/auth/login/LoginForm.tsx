@@ -11,11 +11,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import { Divider, FormControl } from '@mui/material';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '../../firebase';
+import { useUser } from '../../context/Usercontext';
+import axios from 'axios';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -48,32 +50,36 @@ const LoginForm = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
-    // パスワードの表示・非表示を管理するstate
-
     const router = useRouter();
+    const userContext = useContext(useUser());
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        signInWithEmailAndPassword(fireAuth, email, password)
-        .then((userCredential) => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(fireAuth, email, password)
             const user = userCredential.user;
-            alert('ログインユーザー: ' + user.email);
 
-            console.log(fireAuth.currentUser);
-            // ログイン後の画面に遷移
-            router.push('/home')
-        })
-        .catch((err) => {
-            console.log(err.code)
-            console.log(err.message)
+            // http://localhost:8000/user?id=user.id
+            const response = await axios.get(`http://localhost:8000/user?id=${user.uid}`)
+
+            if (response.status === 200) {
+                console.log("ユーザー情報を取得しました")
+                userContext.setUser({id: user.uid, name: response.data.name})
+                router.push('/home')
+            } else {
+                console.log("ユーザー情報の取得に失敗しました")
+            }
+        } catch (error: any) {
+            console.log(error)
             setEmailError(true)
             setPasswordError(true)
-            if (err.code === 'auth/invalid-credential') {
+            if (error.code === 'auth/invalid-credential') {
                 setPasswordErrorMessage('メールアドレスまたはパスワードが正しくありません')
             } else {
+                // 詳細な分岐は後々追加
                 setPasswordErrorMessage('エラーが発生しました')
             }
-        })
+        }
     }
     return (
         <Card variant='outlined'>

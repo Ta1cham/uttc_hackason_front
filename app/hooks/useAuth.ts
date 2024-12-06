@@ -20,7 +20,6 @@ export const useAuth = () => {
     const unsubscribe = onAuthStateChanged(fireAuth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      console.log(pathname);
       if (!currentUser) {
         router.push("/auth/login");
       }

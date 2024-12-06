@@ -11,11 +11,13 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Divider, FormControl } from '@mui/material';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useUser } from '../../context/Usercontext';
 import { fireAuth } from '../../firebase';
+import axios from 'axios';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -54,6 +56,7 @@ const RegisterForm = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const router = useRouter();
+    const userContext = useContext(useUser());
 
     const validateInputs = () => {
         const emailRegex = /^[a-z\d][\w.-]*@[\w.-]+\.[a-z\d]+$/i
@@ -64,6 +67,9 @@ const RegisterForm = () => {
             setNameError(true);
             setNameErrorMessage('名前を入力してください');
             isVallid = false;
+        } else if (name.length > 30) {
+            setNameError(true);
+            setNameErrorMessage('名前は30文字以内で入力してください');
         } else {
             setNameError(false);
             setNameErrorMessage('');
@@ -88,34 +94,47 @@ const RegisterForm = () => {
         return isVallid;
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const isValid = validateInputs();
         if (isValid === false) {
             return;
         }
-        createUserWithEmailAndPassword(fireAuth, email, password)
-        .then((userCredential) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(fireAuth, email, password);
             const user = userCredential.user;
-            console.log('登録成功' + user.uid);
 
-            // ログイン後の画面に遷移
-            router.push('/home');
-        })
-        .catch((error) => {
-            const errorCode = error.code;
+            const response = await axios.post('http://localhost:8000/user', {
+                id: user.uid,
+                name: name,
+            })
 
-            if (errorCode === 'auth/email-already-in-use') {
+            if (response.status === 201) {
+                console.log('ユーザー情報を登録しました')
+                userContext.setUser({ id: user.uid, name: name });
+                router.push('/home');
+            } else {
+                throw new Error('ユーザー情報の登録に失敗しました')
+            }
+        } catch (error: any) {
+            console.log(error)
+            if (error.code === 'auth/email-already-in-use') {
                 setEmailError(true);
                 setEmailErrorMessage('このメールアドレスは既に登録されています');
                 return;
-            } else if (errorCode) {
+            } else if (axios.isAxiosError(error) && error.response) {
+                const backEndError = error.response.data;
+                setNameError(true);
+                setEmailError(true);
+                setPasswordError(true);
+                setPasswordErrorMessage(backEndError.message);
+            } else {
                 setNameError(true);
                 setEmailError(true);
                 setPasswordError(true);
                 setPasswordErrorMessage('登録に失敗しました')
             }
-        });
+        };
     }
     return (
         <Card variant='outlined'>

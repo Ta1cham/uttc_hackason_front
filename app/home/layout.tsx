@@ -17,6 +17,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { ListItemButton } from '@mui/material';
+import { useUser } from '../context/Usercontext';
+import { useContext } from 'react';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -24,6 +26,14 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     position: "relative",
     borderRadius: 10,
 }))
+
+const StyledListItemText = styled(ListItemText)({
+    writingMode: 'horizontal-tb',
+    textOrientation: 'mixed', 
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis', 
+});
 
 // 時間が余ったら、ウィンドウサイズが小さい場合にサイドバーをアイコンのみの表示にする
 export default function FolderList({
@@ -35,6 +45,7 @@ export default function FolderList({
     const handleIconClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
     }
+    const userContext = useContext(useUser());
     return (
         <div
         style={{
@@ -94,6 +105,8 @@ export default function FolderList({
                 <ListItemText primary="Bookmark" />
                 </ListItem>
                 <ListItem sx={{
+                    display: 'flex',
+                    alignItems: 'center',
                     borderRadius: 10,
                     backgroundColor: 'white',
                     '&:hover': {
@@ -102,14 +115,25 @@ export default function FolderList({
                     marginTop: 'auto',
                     marginBottom: 1,
                     cursor: 'pointer',
+                    width: '100%',
                     }}
                     onClick={handleIconClick}
                 >
                     <ListItemAvatar>
                         <Avatar alt="User Icon" src="/default.png"/>
                     </ListItemAvatar>
-                    <ListItemText primary="USERNAME" secondary="userid"/>
-                    <ListItemIcon sx={{marginLeft: 16}}>
+                        <StyledListItemText
+                            // TextOverflowがうまくいっていないので時間あれば修正
+                            primary={userContext.user.name}
+                            secondary={'@' + userContext.user.id.slice(0, 15) + '...'}
+                        />
+                    <ListItemIcon
+                        sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end', // 右端に寄せる
+                        minWidth: 'unset', // デフォルトの幅制限を解除
+                        }}
+                    >
                         <MoreHoriz />
                     </ListItemIcon>
                 </ListItem>
@@ -128,7 +152,7 @@ export default function FolderList({
         <main
             style={{
                 flex: 1, // 残りのスペースを占有
-                padding: "16px", // 内側余白
+                padding: "0px", // 内側余白
                 overflowY: "auto", // コンテンツが多い場合にスクロール可能にする
             }}
         >

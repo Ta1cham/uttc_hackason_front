@@ -1,16 +1,17 @@
 "use client";
 import { fireAuth } from '../firebase';
+import MakeTweetBox from './components/MakeTweet';
+import Box from '@mui/material/Box';
 
 export default function Home() {
     console.log("fortest")
     console.log(fireAuth.currentUser)
 
     return (
-        <div>
-            <h1>Home</h1>
-            <p>Get started by editing <code>app/home/page.tsx</code>
-            f;alkdsf;lafd;alfj;afj;aoiefj;aoejf;gaigoha;ogha;oigj;aojg
-            </p>
+        <div className="p-0">
+            <Box sx={{height: "50px", borderBottom: "1px solid"}}></Box>
+            <MakeTweetBox />
+            <div className="p-4">ほげほげ</div>
         </div>
     )
 }

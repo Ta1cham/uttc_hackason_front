@@ -69,7 +69,7 @@ const LoginForm = () => {
             } else {
                 console.log("ユーザー情報の取得に失敗しました")
             }
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
             setEmailError(true)
             setPasswordError(true)

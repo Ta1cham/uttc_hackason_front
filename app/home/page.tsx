@@ -1,9 +1,10 @@
 "use client";
-import { useCallback, useContext } from 'react';
-import { fireAuth } from '../firebase';
+import { useCallback, useContext, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import MakeTweetBox from './components/MakeTweet';
 import TweetBox from './components/TweetBox';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import useSWRInfinite from 'swr/infinite';
 import Button from '@mui/material/Button';
 import apiClient from '../lib/apiClients';
@@ -36,11 +37,24 @@ export default function Home() {
         return `/tweets?page=${pageIndex}&current_user=${userContext.user.id}`;
     }
 
-    const { data, size, setSize, mutate } = useSWRInfinite(getKey, fetcher, {
+    const { data, size, setSize, mutate, isValidating } = useSWRInfinite(getKey, fetcher, {
+        revalidateOnReconnect: false,
         revalidateIfStale: false,
         revalidateOnFocus: false,
-        revalidateFirstPage: false, // 2ページ目以降を読み込むとき毎回1ページ目を再検証
+        revalidateFirstPage: false,
     });
+
+    const limit = 10
+    const isEmpty = data?.[0]?.length === 0
+    const isReachingEnd = isEmpty || (data && data?.[data?.length - 1]?.length < limit)
+
+    const { ref, inView: isScrollEnd } = useInView()
+
+    useEffect(() => {
+        if (isScrollEnd && !isValidating && !isReachingEnd) {
+            setSize((prevSize) => prevSize + 1);
+        }
+    }, [isScrollEnd, isValidating, isReachingEnd, setSize]);
 
     const handleReload = useCallback(() => {
         mutate();
@@ -68,7 +82,9 @@ export default function Home() {
                 ))
             )}
             <Button onClick={handleReload}>更新</Button>
-            <Button onClick={() => {setSize(size + 1)}}>もっと見る</Button>
+            {!isValidating && <div ref={ref} aria-hidden='true' />}
+            {isValidating && <CircularProgress />}
+            {/* <Button onClick={() => {setSize(size + 1)}}>もっと見る</Button> */}
         </div>
     )
 }

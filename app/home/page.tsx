@@ -33,7 +33,7 @@ export default function Home() {
     );
 
     const getKey = (pageIndex: number, previousPageData: Tweet[][] | null) => {
-        if (previousPageData && !previousPageData.length) return null;
+        if (previousPageData && previousPageData.length === 0) return null;
         return `/tweets?page=${pageIndex}&current_user=${userContext.user.id}`;
     }
 
@@ -45,7 +45,7 @@ export default function Home() {
     });
 
     const limit = 10
-    const isEmpty = data?.[0]?.length === 0
+    const isEmpty = !data || data[0]?.length === 0 || !data?.[0]
     const isReachingEnd = isEmpty || (data && data?.[data?.length - 1]?.length < limit)
 
     const { ref, inView: isScrollEnd } = useInView()
@@ -82,7 +82,7 @@ export default function Home() {
                 ))
             )}
             <Button onClick={handleReload}>更新</Button>
-            {!isValidating && <div ref={ref} aria-hidden='true' />}
+            {<div ref={ref} aria-hidden='true' />}
             {isValidating && <CircularProgress />}
             {/* <Button onClick={() => {setSize(size + 1)}}>もっと見る</Button> */}
         </div>

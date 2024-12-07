@@ -40,6 +40,10 @@ const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
     const userContext = useContext(useUser());
 
     const handlePost = async () => {
+        if (content.length === 0) {
+            setErrorMessage("投稿内容を入力してください");
+            return;
+        }
         if (content.length > 140) {
             setErrorMessage("140文字以内で入力してください");
             return;

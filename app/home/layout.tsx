@@ -56,11 +56,11 @@ export default function FolderList({
             style={{
             display: "flex",
             flexDirection: "column", // 子要素を縦に並べる
-            width: "280px", // サイドバーの幅
+            width: "350px", // サイドバーの幅
             backgroundColor: "#f5f5f5", // 背景色
-            boxShadow: "2px 0 5px rgba(0,0,0,0.1)", // 影
-            padding: "10px", // 内側余白
-            height: "100vh", // サイドバーの高さを画面いっぱいにする
+            boxShadow: "2px 0 5px rgba(0,0,0,0.1)", 
+            padding: "10px 10px 10px 50px", // 内側余白
+            height: "100vh",
             }}
         >
             <List sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh', maxWidth: 360, backgroundColor: 'white' }}>

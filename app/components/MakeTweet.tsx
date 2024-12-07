@@ -10,21 +10,25 @@ import Image from 'next/image';
 import LinkIcon from '@mui/icons-material/Link';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import { Button, Typography } from '@mui/material';
-import { useUser } from '../../context/Usercontext';
+import { useUser } from '../context/Usercontext';
 
-import apiClient from '../../lib/apiClients';
+import apiClient from '../lib/apiClients';
 
 type PostInfo = {
     content: string;
     uid: string;
+    pid: string;
     imurl?: string;
 }
 
 type MakeTweetBoxProps = {
+    mode?: "post" | "reply"; // モードを指定可能にする
+    parentId?: string;
     onPostSuccess: () => void;
 };
 
-const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
+
+const MakeTweetBox = ({mode="post", parentId="", onPostSuccess}: MakeTweetBoxProps) => {
     // ツイート内容
     const [content, setContent] = useState<string>("");
     // 画像プレビュー
@@ -53,6 +57,7 @@ const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
             const postInfo: PostInfo = {
                     content: content,
                     uid: userContext.user.id,
+                    pid: parentId,
                     imurl: previewImage,
                 }
 
@@ -136,7 +141,7 @@ const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
             maxWidth: 600,
             backgroundColor: 'white', 
             padding: "20px 10px 10px 10px", 
-            borderBottom: "3px solid"
+            borderBottom: "1px solid"
         }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', maxWidth: 600, backgroundColor: 'white' }}>
                 <Avatar
@@ -146,7 +151,7 @@ const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
                 </Avatar>
                 <TextField
                     id="post-content"
-                    label="What's happening?"
+                    label={mode === "reply" ? "Post your reply" : "What's happening?"}
                     multiline
                     variant='standard'
                     fullWidth
@@ -224,7 +229,7 @@ const MakeTweetBox = ({onPostSuccess}: MakeTweetBoxProps) => {
                     onChange={setImage}
                 />
                 <label htmlFor="input-file">
-                    <IconButton component="span" sx={{margin: "0 20px 0 55px"}}>
+                    <IconButton component="span" sx={{margin: "0 20px 0 55px", cursor: "pointer", '&:hover': {color: "#218E0B"}}}>
                         <InsertPhotoIcon />
                     </IconButton>
                 </label>

@@ -17,7 +17,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { ListItemButton } from '@mui/material';
-import { useUser } from '../context/Usercontext';
+import { useUser } from '../../context/Usercontext';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -75,7 +75,6 @@ export default function FolderList({
                 <ListItem sx={{
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    cursor: 'pointer',
                     '&:hover': {
                         backgroundColor: '#f0f0f0',
                 }}}
@@ -91,7 +90,6 @@ export default function FolderList({
                 <ListItem sx={{
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    cursor: 'pointer',
                     '&:hover': {
                         backgroundColor: '#f0f0f0',
                 }}}>

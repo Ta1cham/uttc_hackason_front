@@ -8,26 +8,42 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { useTheme } from '@mui/material/styles';
 import { IconButton } from '@mui/material';
-import apiClient from '../../lib/apiClients';
+import apiClient from '../lib/apiClients';
 import { useState, useContext } from 'react';
-import { useUser } from '../../context/Usercontext';
+import { useUser } from '../context/Usercontext';
+import { useRouter } from 'next/navigation';
 
 type LikeInfo = {
     tweet_id: string;
     uid: string;
 }
 
-const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_like}: any) => {
+type TweetBoxProps = {
+    mode?: "sub" | "main";
+    tweetid: string;
+    uid: string;
+    content: string;
+    image?: string;
+    posted_at: string;
+    uname: string;
+    likes: number;
+    is_like: boolean;
+    reps: number;
+}
+
+const TweetBox = ({mode="sub", tweetid, uid, content, image, posted_at, uname, likes, is_like, reps}: TweetBoxProps) => {
     const [isLike, setIsLike] = useState<boolean>(is_like);
     const [likeCount, setLikeCount] = useState<number>(likes);
     const theme = useTheme();
+    const router = useRouter();
 
     // 調整
     const lineheight = 24;
     const boxWidth = 500;
     const userContext = useContext(useUser());
 
-    const handleLike = async () => {
+    const handleLike = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
         try {
             console.log("tweetid: " + tweetid);
             
@@ -50,7 +66,7 @@ const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_lik
     }
 
     const calculateHeight = () => {
-        let baseHeight = 110;
+        let baseHeight = 130;
         if (image) {
             baseHeight += 300;
         }
@@ -69,7 +85,18 @@ const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_lik
         return baseHeight;
     }
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: calculateHeight() + 'px', maxWidth: 600, backgroundColor: 'white', padding: "20px 10px 5px 10px", borderTop: "0.5px solid"}}>
+        <Box sx={{
+                display: 'flex', 
+                flexDirection: 'column', 
+                width: '100%', 
+                height: calculateHeight() + 'px', 
+                maxWidth: 600, 
+                backgroundColor: 'white', 
+                padding: "20px 10px 10px 10px", 
+                borderTop: mode === "main" ? "none" : "0.5px solid",
+                borderBottom: mode === "main" ? "0.5px solid" : "none",
+                cursor: "pointer",
+            }} onClick={() => router.push(`/post/${tweetid}`)}>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', maxWidth: 600, backgroundColor: 'white' }}>
                 <Avatar
                     sx={{marginRight: 2}}
@@ -88,7 +115,7 @@ const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_lik
                     </Typography>
                 </Box>
             </Box>
-            <Typography variant='postContent' sx={{ marginLeft: '56px', maxWidth: boxWidth + "px", whiteSpace: 'pre-line'}}>
+            <Typography variant='postContent' sx={{ marginLeft: '56px', marginBottom: '10px', maxWidth: boxWidth + "px", whiteSpace: 'pre-line'}}>
                 {content}
             </Typography>
             <Box sx={{
@@ -114,12 +141,12 @@ const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_lik
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', backgroundColor: 'white', marginLeft: '56px', marginTop: 'auto', gap: 6, alignItems: "center"}}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
-                    <ChatBubble fontSize='small'/>{12}
+                    <ChatBubble fontSize='small'/>{reps}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
                     <IconButton onClick={handleLike}>
                     {
-                        isLike ? <Favorite fontSize='small' sx={{ color: "#ff0000" }}/> : <FavoriteBorder fontSize='small'/>
+                        isLike ? <Favorite fontSize='small' sx={{ color: "#ff0000"}}/> : <FavoriteBorder fontSize='small' sx={{'&:hover': {color: "#ff0000"}}}/>
                     }
                     </IconButton>
                     {likeCount}

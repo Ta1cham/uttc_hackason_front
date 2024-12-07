@@ -1,14 +1,16 @@
 "use client";
 import { useCallback, useContext, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import MakeTweetBox from './components/MakeTweet';
-import TweetBox from './components/TweetBox';
+import MakeTweetBox from '../components/MakeTweet';
+import TweetBox from '../components/TweetBox';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import useSWRInfinite from 'swr/infinite';
-import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
 import apiClient from '../lib/apiClients';
 import { useUser } from '../context/Usercontext';
+import CachedIcon from '@mui/icons-material/Cached';
+import { Typography } from '@mui/material';
 
 type Tweet = {
     id: string;
@@ -19,6 +21,7 @@ type Tweet = {
     uname: string;
     likes: number;
     is_like: boolean;
+    reps: number;
 }
 
 
@@ -64,8 +67,32 @@ export default function Home() {
 
     return (
         <div className="p-0">
-            <Box sx={{height: "50px", borderBottom: "1px solid"}}></Box>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "600px",
+                height: "50px", 
+                borderBottom: "1px solid"
+                }}>For You</Box>
             <MakeTweetBox onPostSuccess={handleReload} />
+            <ButtonBase sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "50px", 
+                    width: "600px",
+                    color: "#1da1f2",
+                    backgroundColor: "#f5f8fa",
+                }}
+                onClick={handleReload}
+            >
+                <CachedIcon />
+                <Typography>Reload...</Typography>
+            </ButtonBase>
             {flattenedData.length > 0 && (
                 flattenedData.map((tweet: Tweet) => (
                     <TweetBox
@@ -78,10 +105,10 @@ export default function Home() {
                         uname={tweet.uname}
                         likes={tweet.likes}
                         is_like={tweet.is_like}
+                        reps={tweet.reps}
                     />
                 ))
             )}
-            <Button onClick={handleReload}>更新</Button>
             {<div ref={ref} aria-hidden='true' />}
             {isValidating && <CircularProgress />}
             {/* <Button onClick={() => {setSize(size + 1)}}>もっと見る</Button> */}

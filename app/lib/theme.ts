@@ -39,7 +39,7 @@ const theme = createTheme({
     },
     postContent: {
         fontSize: 16,
-        color: 'red',
+        color: 'black',
         fontWeight: 'normal',
     },
   },

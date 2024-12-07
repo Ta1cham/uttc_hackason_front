@@ -1,4 +1,4 @@
-import { Bookmark } from '@mui/icons-material';
+import { Bookmark, FavoriteBorder } from '@mui/icons-material';
 import ChatBubble from '@mui/icons-material/ChatBubble';
 import Favorite from '@mui/icons-material/Favorite';
 import Avatar from '@mui/material/Avatar';
@@ -7,13 +7,47 @@ import Typography from '@mui/material/Typography';
 
 import Image from 'next/image';
 import { useTheme } from '@mui/material/styles';
+import { IconButton } from '@mui/material';
+import apiClient from '../../lib/apiClients';
+import { useState, useContext } from 'react';
+import { useUser } from '../../context/Usercontext';
 
-const TweetBox = ({tweetid, uname, uid, content, image, likes, posted_at}: any) => {
+type LikeInfo = {
+    tweet_id: string;
+    uid: string;
+}
+
+const TweetBox = ({tweetid, uid, content, image, posted_at, uname, likes, is_like}: any) => {
+    const [isLike, setIsLike] = useState<boolean>(is_like);
+    const [likeCount, setLikeCount] = useState<number>(likes);
     const theme = useTheme();
 
     // 調整
     const lineheight = 24;
     const boxWidth = 500;
+    const userContext = useContext(useUser());
+
+    const handleLike = async () => {
+        try {
+            console.log("tweetid: " + tweetid);
+            
+            const info: LikeInfo = {
+                tweet_id: tweetid,
+                uid: userContext.user.id,
+            }
+
+            const response = await apiClient.post('/likes', info);
+
+            if (response.status === 200) {
+                setLikeCount(response.data.count_like);
+                setIsLike(response.data.is_like);
+            } else {
+                throw new Error("いいねに失敗しました")
+            }
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
 
     const calculateHeight = () => {
         let baseHeight = 110;
@@ -82,8 +116,13 @@ const TweetBox = ({tweetid, uname, uid, content, image, likes, posted_at}: any) 
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
                     <ChatBubble fontSize='small'/>{12}
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px", color: 'blue'}}>
-                    <Favorite fontSize='small'/>{likes}
+                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
+                    <IconButton onClick={handleLike}>
+                    {
+                        isLike ? <Favorite fontSize='small' sx={{ color: "#ff0000" }}/> : <FavoriteBorder fontSize='small'/>
+                    }
+                    </IconButton>
+                    {likeCount}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
                     <Bookmark fontSize='small'/>{0}

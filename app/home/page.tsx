@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { fireAuth } from '../firebase';
 import MakeTweetBox from './components/MakeTweet';
 import TweetBox from './components/TweetBox';
@@ -7,27 +7,22 @@ import Box from '@mui/material/Box';
 import useSWRInfinite from 'swr/infinite';
 import Button from '@mui/material/Button';
 import apiClient from '../lib/apiClients';
-import { mutate } from 'swr';
+import { useUser } from '../context/Usercontext';
 
 type Tweet = {
     id: string;
-    content: string;
     uid: string;
+    content: string;
     imurl?: string;
-    likes: number;
     posted_at: string;
     uname: string;
+    likes: number;
+    is_like: boolean;
 }
-
-const getKey = (pageIndex: number, previousPageData: Tweet[][] | null) => {
-        if (previousPageData && !previousPageData.length) return null;
-        return `/tweets?page=${pageIndex}`;
-    }
 
 
 export default function Home() {
-    console.log("fortest")
-    console.log(fireAuth.currentUser)
+    const userContext = useContext(useUser());
 
     const fetcher = useCallback(
         async (url: string) => {
@@ -35,6 +30,11 @@ export default function Home() {
             return res.data;
         }, [],
     );
+
+    const getKey = (pageIndex: number, previousPageData: Tweet[][] | null) => {
+        if (previousPageData && !previousPageData.length) return null;
+        return `/tweets?page=${pageIndex}&current_user=${userContext.user.id}`;
+    }
 
     const { data, size, setSize, mutate } = useSWRInfinite(getKey, fetcher, {
         revalidateIfStale: false,
@@ -57,12 +57,13 @@ export default function Home() {
                     <TweetBox
                         key={tweet.id}
                         tweetid={tweet.id}
-                        uname={tweet.uname}
                         uid={tweet.uid}
                         content={tweet.content}
                         image={tweet.imurl}
-                        likes={tweet.likes}
                         posted_at={tweet.posted_at}
+                        uname={tweet.uname}
+                        likes={tweet.likes}
+                        is_like={tweet.is_like}
                     />
                 ))
             )}

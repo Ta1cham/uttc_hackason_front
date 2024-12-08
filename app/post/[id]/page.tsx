@@ -23,6 +23,7 @@ type Tweet = {
     is_like: boolean;
     reps: number;
     uimage: string;
+    note: string;
 }
 
 const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
@@ -109,6 +110,7 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
                 is_like={tweet.is_like}
                 reps={tweet.reps}
                 userimage={tweet.uimage}
+                note={tweet.note}
             />
             <MakeTweetBox mode="reply" parentId={tweet.id} onPostSuccess={handleReload} />
             {flattenedData.length > 0 && (
@@ -126,6 +128,7 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
                         is_like={tweet.is_like}
                         reps={tweet.reps}
                         userimage={tweet.uimage}
+                        note={tweet.note}
                     />
                 ))
             )}

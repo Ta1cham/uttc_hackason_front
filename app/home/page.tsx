@@ -23,6 +23,7 @@ type Tweet = {
     is_like: boolean;
     reps: number;
     uimage: string;
+    note: string;
 }
 
 
@@ -32,6 +33,8 @@ export default function Home() {
     const fetcher = useCallback(
         async (url: string) => {
             const res = await apiClient.get(url);
+            console.log("url: " + url);
+            console.log(res.data);
             return res.data;
         }, [],
     );
@@ -108,6 +111,7 @@ export default function Home() {
                         is_like={tweet.is_like}
                         reps={tweet.reps}
                         userimage={tweet.uimage}
+                        note={tweet.note}
                     />
                 ))
             )}

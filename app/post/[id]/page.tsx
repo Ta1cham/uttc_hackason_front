@@ -22,6 +22,7 @@ type Tweet = {
     likes: number;
     is_like: boolean;
     reps: number;
+    uimage: string;
 }
 
 const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
@@ -36,6 +37,8 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
             const response = await apiClient.get(`/tweet?id=${id}&current_user=${userContext.user.id}`);
             if (response.status === 200) {
                 setTweet(response.data);
+                console.log("取得")
+                console.log(response.data)
             } else {
                 throw new Error("ツイート情報の取得に失敗しました");
             }
@@ -50,9 +53,7 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
     // リプライの表示
     const fetcher = useCallback(
         async (url: string) => {
-            await console.log(url);
             const res = await apiClient.get(url);
-            await console.log(res);
             return res.data;
         }, [],
     );
@@ -76,11 +77,6 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
     const { ref, inView: isScrollEnd } = useInView()
 
     useEffect(() => {
-        console.log("isScrollEnd: " + isScrollEnd);
-        console.log("isValidating: " + isValidating);
-        console.log("isReachingEnd: " + isReachingEnd);
-        console.log("isEmpty: " + isEmpty);
-        console.log(data);
         if (isScrollEnd && !isValidating && !isReachingEnd) {
             setSize((prevSize) => prevSize + 1);
         }
@@ -112,6 +108,7 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
                 likes={tweet.likes}
                 is_like={tweet.is_like}
                 reps={tweet.reps}
+                userimage={tweet.uimage}
             />
             <MakeTweetBox mode="reply" parentId={tweet.id} onPostSuccess={handleReload} />
             {flattenedData.length > 0 && (
@@ -128,6 +125,7 @@ const PostPage = ({ params }: {params: Promise<{ id: string }>}) => {
                         likes={tweet.likes}
                         is_like={tweet.is_like}
                         reps={tweet.reps}
+                        userimage={tweet.uimage}
                     />
                 ))
             )}

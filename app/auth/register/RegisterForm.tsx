@@ -112,7 +112,7 @@ const RegisterForm = () => {
 
             if (response.status === 201) {
                 console.log('ユーザー情報を登録しました')
-                userContext.setUser({ id: user.uid, name: name });
+                userContext.setUser({ id: user.uid, name: name, image: '' });
                 router.push('/home');
             } else {
                 throw new Error('ユーザー情報の登録に失敗しました')

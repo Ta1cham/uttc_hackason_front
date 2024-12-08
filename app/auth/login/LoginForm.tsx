@@ -64,7 +64,7 @@ const LoginForm = () => {
 
             if (response.status === 200) {
                 console.log("ユーザー情報を取得しました")
-                userContext.setUser({id: user.uid, name: response.data.name})
+                userContext.setUser({id: user.uid, name: response.data.name, image: response.data.image})
                 router.push('/home')
             } else {
                 console.log("ユーザー情報の取得に失敗しました")

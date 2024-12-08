@@ -1,4 +1,4 @@
-import { Bookmark, FavoriteBorder } from '@mui/icons-material';
+import { FavoriteBorder } from '@mui/icons-material';
 import ChatBubble from '@mui/icons-material/ChatBubble';
 import Favorite from '@mui/icons-material/Favorite';
 import Avatar from '@mui/material/Avatar';
@@ -29,9 +29,10 @@ type TweetBoxProps = {
     likes: number;
     is_like: boolean;
     reps: number;
+    userimage: string;
 }
 
-const TweetBox = ({mode="sub", tweetid, uid, content, image, posted_at, uname, likes, is_like, reps}: TweetBoxProps) => {
+const TweetBox = ({mode="sub", tweetid, uid, content, image, posted_at, uname, likes, is_like, reps, userimage}: TweetBoxProps) => {
     const [isLike, setIsLike] = useState<boolean>(is_like);
     const [likeCount, setLikeCount] = useState<number>(likes);
     const theme = useTheme();
@@ -100,10 +101,17 @@ const TweetBox = ({mode="sub", tweetid, uid, content, image, posted_at, uname, l
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', maxWidth: 600, backgroundColor: 'white' }}>
                 <Avatar
                     sx={{marginRight: 2}}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        router.push(`/user/${uid}`)
+                    }}
                 >
-                    <Image src="/default.png" alt="User Icon" width={40} height={40} />
+                    <Image src={userimage || "/default.png"} alt="User Icon" width={40} height={40} />
                 </Avatar>
-                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', maxWidth: 600, backgroundColor: 'white', alignItems: "top", gap: 0.5}}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'auto', maxWidth: 600, backgroundColor: 'white', alignItems: "top", gap: 0.5}} onClick={(event) => {
+                    event.stopPropagation();
+                    router.push(`/user/${uid}`)
+                }}>
                     <Typography variant='postUserName'>
                         {uname}
                     </Typography>
@@ -150,9 +158,6 @@ const TweetBox = ({mode="sub", tweetid, uid, content, image, posted_at, uname, l
                     }
                     </IconButton>
                     {likeCount}
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: "center", fontSize: "14px"}}>
-                    <Bookmark fontSize='small'/>{0}
                 </Box>
             </Box>
         </Box>

@@ -6,8 +6,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+// あとでAndroidをfaviconにする
+import Android from '@mui/icons-material/Android';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 
 import { styled } from '@mui/material/styles';
@@ -177,7 +180,7 @@ export default function FolderList({
             height: "100vh",
             }}
         >
+      </div>
         </div>
-        </div>
-    );
+  );
 }

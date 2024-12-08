@@ -7,7 +7,6 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import Cancel from '@mui/icons-material/Cancel';
 
 import Image from 'next/image';
-import LinkIcon from '@mui/icons-material/Link';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import { Button, Typography } from '@mui/material';
 import { useUser } from '../context/Usercontext';
@@ -147,7 +146,7 @@ const MakeTweetBox = ({mode="post", parentId="", onPostSuccess}: MakeTweetBoxPro
                 <Avatar
                     sx={{marginRight: 2}}
                 >
-                    <Image src="/default.png" alt="User Icon" width={40} height={40} />
+                    <Image src={userContext.user.image || "/default.png"} alt="User Icon" width={40} height={40} />
                 </Avatar>
                 <TextField
                     id="post-content"
@@ -233,7 +232,6 @@ const MakeTweetBox = ({mode="post", parentId="", onPostSuccess}: MakeTweetBoxPro
                         <InsertPhotoIcon />
                     </IconButton>
                 </label>
-                <LinkIcon />
                 <Typography sx={{marginLeft: 'auto', color: wcerror?'red' : 'black'}}>{content.length}/140</Typography>
                 <Button sx={{backgroundColor: "#1da1f2", color: "white", borderRadius: 50, width: "60px", marginLeft: 2, marginRight: 2}} onClick={handlePost}>投稿</Button>
             </Box>

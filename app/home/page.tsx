@@ -22,6 +22,7 @@ type Tweet = {
     likes: number;
     is_like: boolean;
     reps: number;
+    uimage: string;
 }
 
 
@@ -106,6 +107,7 @@ export default function Home() {
                         likes={tweet.likes}
                         is_like={tweet.is_like}
                         reps={tweet.reps}
+                        userimage={tweet.uimage}
                     />
                 ))
             )}

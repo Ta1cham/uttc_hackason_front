@@ -1,12 +1,12 @@
 "use client";
 import { createContext, useState, useEffect } from 'react';
 
-const UserContext = createContext({ user: { id: '', name: '' }, setUser: (user: { id: string; name: string }) => {} });
+const UserContext = createContext({ user: { id: '', name: '', image: '' }, setUser: (user: { id: string; name: string, image: string}) => {} });
 
 import { ReactNode } from 'react';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState({ id: '', name: '' });
+    const [user, setUser] = useState({ id: '', name: '', image: '' });
 
     useEffect(() => {
     if (typeof window !== 'undefined') {

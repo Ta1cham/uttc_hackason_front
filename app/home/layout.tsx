@@ -20,6 +20,7 @@ import { ListItemButton } from '@mui/material';
 import { useUser } from '../context/Usercontext';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { Person } from '@mui/icons-material';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -67,15 +68,13 @@ export default function FolderList({
         >
             <List sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh', maxWidth: 360, backgroundColor: 'white' }}>
                 <ListItem>
-                    <ListItemIcon>
-                        <Android sx={{fontSize: 40}}/>
-                    </ListItemIcon>
-                    <ListItemText primary="あとでファビコンにする"/>
+                    <ListItemAvatar>
+                        <Avatar src='/logo.png' sx={{width: 60, height: 60}}/>
+                    </ListItemAvatar>
                 </ListItem>
                 <ListItem sx={{
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    cursor: 'pointer',
                     '&:hover': {
                         backgroundColor: '#f0f0f0',
                 }}}
@@ -91,7 +90,21 @@ export default function FolderList({
                 <ListItem sx={{
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    cursor: 'pointer',
+                    '&:hover': {
+                        backgroundColor: '#f0f0f0',
+                }}}
+                onClick={() => {router.push(`/user/${userContext.user.id}`)}}
+                >
+                    <ListItemAvatar>
+                    <Avatar>
+                        <Person />
+                    </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Profile"/>
+                </ListItem>
+                <ListItem sx={{
+                    borderRadius: 10,
+                    backgroundColor: 'white',
                     '&:hover': {
                         backgroundColor: '#f0f0f0',
                 }}}>
@@ -101,14 +114,6 @@ export default function FolderList({
                     </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Search" />
-                </ListItem>
-                <ListItem>
-                <ListItemAvatar>
-                <Avatar>
-                    <BeachAccessIcon />
-                </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Bookmark" />
                 </ListItem>
                 <ListItem sx={{
                     display: 'flex',
@@ -126,7 +131,7 @@ export default function FolderList({
                     onClick={handleIconClick}
                 >
                     <ListItemAvatar>
-                        <Avatar alt="User Icon" src="/default.png"/>
+                        <Avatar alt="User Icon" src={userContext.user.image || "/default.png"}/>
                     </ListItemAvatar>
                         <StyledListItemText
                             // TextOverflowがうまくいっていないので時間あれば修正
@@ -157,13 +162,25 @@ export default function FolderList({
 
         <main
             style={{
-                flex: 1, // 残りのスペースを占有
-                padding: "0px", // 内側余白
+                width: "720px", // メインコンテンツの幅
+                padding: "0 60px 0 60px", // 内側余白
                 overflowY: "auto", // コンテンツが多い場合にスクロール可能にする
             }}
         >
             {children}
         </main>
+        <div
+            style={{
+            flex: 1, // 残りのスペースを占有
+            display: "flex",
+            flexDirection: "column", // 子要素を縦に並べる
+            backgroundColor: "#f5f5f5", // 背景色
+            boxShadow: "none",
+            padding: "10px 10px 10px 50px", // 内側余白
+            height: "100vh",
+            }}
+        >
+        </div>
         </div>
   );
 }
